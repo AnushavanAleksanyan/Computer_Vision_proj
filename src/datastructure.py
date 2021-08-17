@@ -1,8 +1,21 @@
 import numpy as np
 import pandas as pd
 from zipfile import ZipFile
+import glob
 
-file_name = "data.zip"
+archive_name = "initial_data/500MB.zip"
 
-with ZipFile(file_name, 'r') as zip:
-	zip.extractall
+with ZipFile(archive_name, 'r') as zip:
+ 	zip.extract("500MB/labels.csv", path ="data")
+
+df = pd.read_csv("data/500MB/labels.csv")
+
+# print(df.head(50))
+# print(df.columns)
+
+folder  = df["id"].iloc[0]
+color = df["Color"].iloc[0]
+print(glob.glob("data"))
+
+directories = glob.glob("data/test/*/")
+print(directories)
