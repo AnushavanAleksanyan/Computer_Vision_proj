@@ -1,21 +1,50 @@
 import numpy as np
 import pandas as pd
+import os
+import shutil
 from zipfile import ZipFile
-import glob
+from glob import glob
 
-archive_name = "initial_data/500MB.zip"
+def acc():
+	ans = input("Type Y to unzip the archive: ")
+	if ans.lower() == "y":
+		return True
 
-with ZipFile(archive_name, 'r') as zip:
- 	zip.extract("500MB/labels.csv", path ="data")
+
+archive = "initial_data/500MB.zip"
+
+if acc():
+	with ZipFile(archive, 'r') as zip:
+	 	zip.extract("500MB/labels.csv", path ="data")
+
+if acc():
+	with ZipFile(archive) as zip_file:
+		zip_file.extractall("initial_data/")
+
 
 df = pd.read_csv("data/500MB/labels.csv")
 
 # print(df.head(50))
 # print(df.columns)
 
-folder  = df["id"].iloc[0]
-color = df["Color"].iloc[0]
-print(glob.glob("data"))
+folder_path = "data/train/"
+folder_list = glob("data/train/*/")
 
-directories = glob.glob("data/test/*/")
-print(directories)
+
+# for index, row in df.iterrows():
+# 	print (row['id'], row['Color'])
+files=os.listdir("initial_data/500MB/images/2302883/")
+"""
+
+for fname in files:
+	shutil.copy2(os.path.join("initial_data/500MB/images/2302883/",fname),"data/train/white/")
+"""
+
+def move(id, color):
+	for address, dirs, files in os.walk("initial_data/500MB/images/"):
+		for dir in dirs:
+			files2 = os.listdir(f"initial_data/500MB/images/{id}/")
+			for fname in files2:
+				shutil.copy2(os.path.join(f"initial_data/500MB/images/{id}/",fname),f"data/train/{color}/")
+for index, row in df.iterrows():
+	move(row['id'], row['Color'])
