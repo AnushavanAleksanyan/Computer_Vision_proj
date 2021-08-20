@@ -12,7 +12,7 @@ def acc():
 
 
 archive = "initial_data/500MB.zip"
-
+"""
 if acc():
 	with ZipFile(archive, 'r') as zip:
 	 	zip.extract("500MB/labels.csv", path ="data")
@@ -20,7 +20,7 @@ if acc():
 if acc():
 	with ZipFile(archive) as zip_file:
 		zip_file.extractall("initial_data/")
-
+"""
 
 df = pd.read_csv("data/500MB/labels.csv")
 
@@ -29,7 +29,7 @@ df = pd.read_csv("data/500MB/labels.csv")
 
 folder_path = "data/train/"
 folder_list = glob("data/train/*/")
-
+f_names = ["Black", "Blue", "Green", "Pink", "Red", "White"]
 
 # for index, row in df.iterrows():
 # 	print (row['id'], row['Color'])
@@ -46,5 +46,12 @@ def move(id, color):
 			files2 = os.listdir(f"initial_data/500MB/images/{id}/")
 			for fname in files2:
 				shutil.copy2(os.path.join(f"initial_data/500MB/images/{id}/",fname),f"data/train/{color}/")
+			os.rename(f"data/train/{color}/{fname}",f"data/train/{color}/{fname} - {dir}")
+
 for index, row in df.iterrows():
-	move(row['id'], row['Color'])
+	if not row['Color'] in f_names:
+		move(row['id'], "other")
+		print(row['id'], "other")
+	else:
+		move(row['id'], row["Color"])
+		print(row['id'], row["Color"])
