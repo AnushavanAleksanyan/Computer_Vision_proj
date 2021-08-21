@@ -3,7 +3,6 @@ import pandas as pd
 import os
 import shutil
 from zipfile import ZipFile
-from glob import glob
 import pathlib
 
 def acc():
@@ -38,25 +37,27 @@ df = pd.read_csv("data/500MB/labels.csv")
 # print(df.head(50))
 # print(df.columns)
 
-folder_path = "data/train/"
-folder_list = glob("data/train/*/")
+
 f_names = ["Black", "Blue", "Green", "Pink", "Red", "White"]
 
-files=os.listdir("initial_data/500MB/images/2302883/")
-
 def move(id, color):
-	i = 0
+	i=0
 	for address, dirs, files in os.walk("initial_data/500MB/images/"):
+		i+=1
 		for dir in dirs:
+			if i % 10 != 0:
+				dest = "train"
+			else:
+				dest = "test"
+			print(dest)
 			files2 = os.listdir(f"initial_data/500MB/images/{id}/")
 			for fname in files2:
-				if i // 10 != 0:
-					dest = "train"
-				else:
-					dest = "test"
 				shutil.copy2(os.path.join(f"initial_data/500MB/images/{id}/",fname),f"data/{dest}/{color}/")
-			i+=1
+		print (i)
 		rename_photos(color)
+			
+	
+
 
 for index, row in df.iterrows():
 	if not row['Color'] in f_names:
@@ -66,7 +67,3 @@ for index, row in df.iterrows():
 		move(row['id'], row["Color"])
 		print(row['id'], row["Color"])
 
-
-
-if __name__ == "__main__":
-	rename_photos()
