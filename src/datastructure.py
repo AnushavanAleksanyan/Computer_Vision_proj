@@ -4,7 +4,9 @@ import os
 import shutil
 from zipfile import ZipFile
 import pathlib
-from glob2 import glob
+import random
+# import dircache
+
 
 def acc():
 	ans = input("Type 'Y' to unzip the archive: ")
@@ -59,71 +61,14 @@ def move_images():
 
 def devide_test():
 	for folder in os.listdir(f"data/train/"):
+		img_count = 0
 		for file in os.listdir(f"data/train/{folder}/"):
-			print(file)
+			img_count += 1
+			if img_count%10 ==0:
+				filename = random.choice(os.listdir(f"data/train/{folder}/"))
+				shutil.move(os.path.join(f"data/train/{folder}/",filename),os.path.join(f"data/test/{folder}/",filename))
+
 
 
 devide_test()
 
-
-
-
-
-
-
-
-
-
-
-
-"""
-df = pd.read_csv("data/500MB/labels.csv")
-
-
-
-def move(id, color):
-	for address, dirs, files in os.walk("initial_data/500MB/images/"):
-		for dir in dirs:
-			files2 = os.listdir(f"initial_data/500MB/images/{id}/")
-			for fname in files2:
-				shutil.copy2(os.path.join(f"initial_data/500MB/images/{id}/",fname),f"data/train/{color}/")
-		rename_photos(color)
-
-
-def arrange_img(var, id, color, file):
-	shutil.copy2(f"initial_data/500MB/images/{id}/{file}",f"data/{var}/{color}/{str(id)+file}")
-
-
-if __name__ == "__main__":
-	filelist = []
-	folderlist = []
-	i=0
-	for root,dirs,files in os.walk(f"initial_data/500MB/images/"):
-
-		print(os.listdir(root))
-			# for file in files:
-			# 	print(file)
-	# 		filelist.append(file)
-	# 		folderlist.append(root)
-	# # print(len(filelist))
-	# print(len(folderlist))
-	#print(dirlist)
-	# fold = iter(dirlist)
-	# if i%10 == 0:
-	# 	var = "test"
-	# else:
-	# 	var = "train"
-	# print(df[df['id']==next(fold)])
-	# if not df[df['id']==next(fold)]["Color"] in f_names:
-	# 	#arrange_img(var, folderlist[i], "other",filelist[i])
-	# 	print(var, folderlist[i], "other", filelist[i])
-	# else:
-	# 	#arrange_img(var, folderlist[i], row["Color"], filelist[i])
-	# 	print(var, folderlist[i], df[df['id']==next(fold)]["Color"], filelist[i])
-	# i += 1
-
-# result = df[df['id']==2462198]["Color"]
-# print(result)
-
-# for fname in filelist:
-"""
