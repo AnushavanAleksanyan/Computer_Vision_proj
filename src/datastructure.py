@@ -5,7 +5,6 @@ import shutil
 from zipfile import ZipFile
 import pathlib
 import random
-# import dircache
 
 
 def acc():
