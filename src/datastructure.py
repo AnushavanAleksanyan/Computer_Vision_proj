@@ -67,7 +67,10 @@ def devide_test():
 			if img_count%10 ==0:
 				filename = random.choice(os.listdir(f"data/train/{folder}/"))
 				shutil.move(os.path.join(f"data/train/{folder}/",filename),os.path.join(f"data/test/{folder}/",filename))
-
+	for folder in os.listdir(f"data/test/"):
+		if len(os.listdir(f"data/test/{folder}/")) == 0:
+			file_to_move = random.choice(os.listdir(f"data/train/{folder}/"))
+			shutil.move(os.path.join(f"data/train/{folder}/",file_to_move),os.path.join(f"data/test/{folder}/",file_to_move))
 
 
 devide_test()
