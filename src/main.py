@@ -9,6 +9,8 @@ from torch.utils import data
 
 import matplotlib.pyplot as plt
 import numpy as np
+from multiprocessing import freeze_support
+from multiprocessing import Pool
 
 
 print("Torch version:", torch.__version__)
@@ -75,27 +77,29 @@ train_data = torchvision.datasets.ImageFolder(root=train_data_path, transform=tr
 
 print("\nNum Images in Train Dataset:", len(train_data))
 #print("Num Images in Test Dataset:", len(test_data))
-
-batch_size=16
-train_data_loader = data.DataLoader(train_data, batch_size=batch_size,num_workers=4)
-
-
-for epoch in range(5):
-    total_loss = 0
-    total_correct = 0
-    for batch in train_data_loader:
-        images,labels = batch
-
-        preds = network(images)
-        loss = F.cross_entropy(preds,labels) # Calculate Loss
-
-        optimizer.zer_grad()
-        loss.backward()
-        optimizer.step()
-
-        total_loss+=loss.item()
-        total_correct+=get_num_correct(preds, labels)
-    print("epoch:", epoch, "total_correct:", total_correct, "loss:", total_loss)
-
 if __name__ == '__main__':
-    freeze_support()
+    torch.multiprocessing.freeze_support()
+    batch_size=16
+    train_data_loader = data.DataLoader(train_data, batch_size=batch_size,num_workers=4)
+
+    optimizer = optim.Adam(network.parameters(), lr=0.001)
+
+    for epoch in range(5):
+        total_loss = 0
+        total_correct = 0
+        for batch in train_data_loader:
+            images,labels = batch
+
+            preds = network(images)
+            loss = F.cross_entropy(preds,labels) # Calculate Loss
+
+            optimizer.zero_grad()
+            loss.backward()
+            optimizer.step()
+
+            total_loss+=loss.item()
+            total_correct+=get_num_correct(preds, labels)
+        print("epoch:", epoch, "total_correct:", total_correct, "loss:", total_loss)
+
+
+
