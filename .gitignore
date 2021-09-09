@@ -132,3 +132,4 @@ dmypy.json
 data/
 initial_data/
 500MB.zip
+runs/

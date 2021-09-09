@@ -6,6 +6,7 @@ import torch.optim as optim
 import torchvision
 from torchvision import transforms
 from torch.utils import data
+from torch.utils.tensorboard import SummaryWriter
 
 import matplotlib.pyplot as plt
 import numpy as np
